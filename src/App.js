@@ -34,23 +34,24 @@ class App extends Component {
 
     this.state = {
       input: '',
+      imageUrl: ''
     }
   }
 
   // This is an event listener. It listens to the changes made in the input bar of our app.
   onInputChange = (event) =>{
-    console.log(event.target.value);
+    this.setState({input: event.target.value});
   }
 
   onImageSubmit = () => {
-    console.log('click');
+    this.setState({imageUrl: this.state.input})
     app.models
     .predict(
-      Clarifai.COLOR_MODEL,
-      "https://samples.clarifai.com/face-det.jpg")
+      Clarifai.FACE_DETECT_MODEL,
+      this.state.input)
     .then(
       function(response) {
-        console.log(response);
+        console.log(response.outputs[0].data.regions[0].region_info.bounding_box);
       },
       function(err) {
         // there was an error
@@ -70,7 +71,7 @@ class App extends Component {
         <ImageLinkForm 
           onInputChange={this.onInputChange}
           onImageSubmit={this.onImageSubmit} />
-        <FaceRecognition />
+        <FaceRecognition imageUrl={this.state.imageUrl} />
       </div>
     );
   }
