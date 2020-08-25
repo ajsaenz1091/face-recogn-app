@@ -31,8 +31,13 @@ class App extends Component {
     }
   }
 
+  // This is an event listener. It listens to the changes made in the input bar of our app.
   onInputChange = (event) =>{
     console.log(event.target.value);
+  }
+
+  onImageSubmit = () => {
+    console.log('click');
   }
 
   render() {
@@ -44,7 +49,9 @@ class App extends Component {
         <Navigation />
         <Logo />
         <Rank />
-        <ImageLinkForm onInputChange={this.onInputChange} />
+        <ImageLinkForm 
+          onInputChange={this.onInputChange}
+          onImageSubmit={this.onImageSubmit} />
       </div>
     );
   }
