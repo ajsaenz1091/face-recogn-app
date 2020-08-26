@@ -44,7 +44,20 @@ class App extends Component {
     const image = document.getElementById('inputimage');
     const width = Number(image.width);
     const height = Number(image.height);
-    console.log(width, height);
+    // we are going to return an object that we will use to fill out the "box" state
+    return {
+      leftCol: clarifaiFace.left_col * width,
+      topRow: clarifaiFace.top_row * height,
+      rightCol: width - (clarifaiFace.right_col * width),
+      bottomRow: height - (clarifaiFace.bottom_row * height)
+    }
+  }
+
+  // This function uses the data returned by the calculateFaceLocation function to fill out the "box" state
+
+  displayFaceBox = (box) => {
+    console.log('box: ', box);
+    this.setState({box: box});
   }
 
   // This is an event listener. It listens to the changes made in the input bar of our app.
@@ -58,7 +71,7 @@ class App extends Component {
     .predict(
       Clarifai.FACE_DETECT_MODEL,
       this.state.input)
-    .then(response => this.calculateFaceLocation(response))
+    .then(response => this.displayFaceBox(this.calculateFaceLocation(response)))
     .catch(err => console.log(err));
   }
 
@@ -74,7 +87,7 @@ class App extends Component {
         <ImageLinkForm 
           onInputChange={this.onInputChange}
           onImageSubmit={this.onImageSubmit} />
-        <FaceRecognition imageUrl={this.state.imageUrl} />
+        <FaceRecognition imageUrl={this.state.imageUrl} box={this.state.box}/>
       </div>
     );
   }
