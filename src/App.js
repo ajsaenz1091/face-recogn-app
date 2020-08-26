@@ -36,7 +36,8 @@ class App extends Component {
       input: '',
       imageUrl: '',
       box: {},
-      route:'signin',
+      route:'home',
+      isSignedIn: false,
     }
   }
 
@@ -57,7 +58,6 @@ class App extends Component {
   // This function uses the data returned by the calculateFaceLocation function to fill out the "box" state
 
   displayFaceBox = (box) => {
-    console.log('box: ', box);
     this.setState({box: box});
   }
 
@@ -77,15 +77,22 @@ class App extends Component {
   }
 
   onRouteChange = (route) => {
+    if (route === 'signout') {
+      this.setState({isSignedIn: false});
+    }else if (route === 'home'){
+      this.setState({isSignedIn: true});
+    }
     this.setState({route: route});
   }
+
   render() {
+    const { box, imageUrl, isSignedIn, route } = this.state;
     return (
       <div className="App">
         <Particles className='particles'
           params={particlesOptions}
         />
-        <Navigation onRouteChange={this.onRouteChange}/>
+      <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}/>
         { this.state.route === 'home' 
         ? <div >
             <Logo />
@@ -93,10 +100,10 @@ class App extends Component {
             <ImageLinkForm 
               onInputChange={this.onInputChange}
               onImageSubmit={this.onImageSubmit} />
-            <FaceRecognition imageUrl={this.state.imageUrl} box={this.state.box}/>
+            <FaceRecognition imageUrl={imageUrl} box={box}/>
           </div>
         : (
-            this.state.route === 'signin'
+            route === 'signin'
             ? <Signin onRouteChange={this.onRouteChange} />
             : <Register onRouteChange={this.onRouteChange} />
           )
