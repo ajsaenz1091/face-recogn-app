@@ -41,13 +41,6 @@ class App extends Component {
     }
   }
 
-  // Comunicating with our server.js in face-recogn-app-api
-
-  componentDidMount() {
-    fetch('http://localhost:3000/')//get the api
-      .then(response => response.json())//convert the response to json
-      .then(console.log)
-  }
 
   calculateFaceLocation = (data) => {
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
